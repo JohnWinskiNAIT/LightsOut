@@ -5,18 +5,50 @@ using UnityEngine.UI;
 
 public class LightToggle : MonoBehaviour
 {
-    [SerializeField] Button[] adjacentButtons;
-    
     public void ToggleButton()
     {
+        Button button;
+
         ToggleSelf();
 
-        foreach (var button in adjacentButtons)
+        button = (Button)GetComponent<Button>().FindSelectableOnLeft();
+
+        if (button != null)
         {
-            button.GetComponent<LightToggle>().ToggleSelf();
+            ToggleAdjacent(button);
         }
+
+        button = (Button)GetComponent<Button>().FindSelectableOnRight();
+
+        if (button != null)
+        {
+            ToggleAdjacent(button);
+        }
+
+        button = (Button)GetComponent<Button>().FindSelectableOnUp();
+
+        if (button != null)
+        {
+            ToggleAdjacent(button);
+        }
+
+        button = (Button)GetComponent<Button>().FindSelectableOnDown();
+
+        if (button != null)
+        {
+            ToggleAdjacent(button);
+        }
+
     }
 
+    void ToggleAdjacent(Button btn)
+    {
+        LightToggle lt = btn.GetComponent<LightToggle>();
+        if (lt != null)
+        {
+            lt.ToggleSelf();
+        }
+    }
     public void ToggleSelf()
     {
         Image bi = GetComponent<Button>().GetComponent<Image>();
