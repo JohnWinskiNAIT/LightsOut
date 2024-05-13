@@ -14,6 +14,14 @@ public class StartingState : MonoBehaviour
     bool gameStart = false;
     bool lightsOut;
 
+    enum difficulty
+    {
+        easy = 9,
+        hard = 25
+    };
+
+    difficulty levelSetting = difficulty.easy;
+
     // Update is called once per frame
     void Update()
     {
@@ -46,12 +54,33 @@ public class StartingState : MonoBehaviour
         }
     }
 
+    public void SetLevel(int value)
+    {
+        switch (value) 
+        {
+            case 0:
+                levelSetting = difficulty.easy;
+                break;
+            case 1:
+                levelSetting = difficulty.hard;
+                break;
+            default:
+                levelSetting = difficulty.easy;
+                break;
+        }
+    }
+
     public void StartGame()
     {
         foreach (var button in allButtons)
         {
-            button.GetComponent<LightToggle>().Reset();
-            button.interactable = true;
+            button.interactable = false;
+        }
+
+        for (int i = 0; i < (int)levelSetting; i++)
+        {
+            allButtons[i].GetComponent<LightToggle>().Reset();
+            allButtons[i].interactable = true;
         }
 
         int rand = Random.Range(0, 13);
