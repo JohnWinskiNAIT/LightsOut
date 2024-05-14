@@ -14,13 +14,36 @@ public class StartingState : MonoBehaviour
     bool gameStart = false;
     bool lightsOut;
 
+    // Each enum is equal to the number of active buttons.
     enum difficulty
     {
         easy = 9,
         hard = 25
     };
 
+    // Set the default difficulty.
     difficulty levelSetting = difficulty.easy;
+
+    // Initialize the number of patterns for each difficulty.
+    int[][] easyPattern = new int[6][];
+    int[][] hardPattern = new int[4][];
+
+    private void Start()
+    {
+        // Set the patterns for the easy difficulty.
+        easyPattern[0] = new int[] { 2, 4, 6, 8 };
+        easyPattern[1] = new int[] { 1, 3, 5, 7 };
+        easyPattern[2] = new int[] { 0 };
+        easyPattern[3] = new int[] { 2, 6 };
+        easyPattern[4] = new int[] { 2 };
+        easyPattern[5] = new int[] { 0, 3 };
+
+        // Set the patterns for the hard difficulty.
+        hardPattern[0] = new int[] { 2, 4, 6, 8, 12, 16, 20, 24 };
+        hardPattern[1] = new int[] { 0, 10, 14, 18, 22 };
+        hardPattern[2] = new int[] { 12, 16, 20, 24 };
+        hardPattern[3] = new int[] { 1, 5, 10, 13, 15, 18, 21, 23 };
+    }
 
     // Update is called once per frame
     void Update()
@@ -28,6 +51,7 @@ public class StartingState : MonoBehaviour
         lightsOut = true;
         if (gameStart)
         {
+            // Check to see if none of the buttons are yellow(on).
             for (int i = 0; i < allButtons.Length && lightsOut; i++)
             {
                 Image bi = allButtons[i].GetComponent<Button>().GetComponent<Image>();
@@ -42,6 +66,7 @@ public class StartingState : MonoBehaviour
             }
         }
 
+        // If the game is started and all lights are out then the player wins.
         if (lightsOut && gameStart)
         {
             gameStart = false;
@@ -56,6 +81,7 @@ public class StartingState : MonoBehaviour
 
     public void SetLevel(int value)
     {
+        // Change difficulty.
         switch (value) 
         {
             case 0:
@@ -72,67 +98,49 @@ public class StartingState : MonoBehaviour
 
     public void StartGame()
     {
+        int randPattern;
+        gameStart = false;
+        // Set all buttons to be not interactable
         foreach (var button in allButtons)
         {
+            button.GetComponent<LightToggle>().Reset();
             button.interactable = false;
         }
 
+        // Set only the buttons for the current level interactable
         for (int i = 0; i < (int)levelSetting; i++)
         {
-            allButtons[i].GetComponent<LightToggle>().Reset();
             allButtons[i].interactable = true;
         }
 
-        int rand = Random.Range(0, 13);
-
-        switch (rand)
+        switch (levelSetting)
         {
-            case 0:
-                allButtons[0].GetComponent<LightToggle>().ToggleSelf();
+            // Choose a random easy pattern and set the button states.
+            case difficulty.easy:
+                randPattern = Random.Range(0, easyPattern.Length);
+                for (int i = 0; i < easyPattern[randPattern].Length; i++)
+                {
+                    if (allButtons[easyPattern[randPattern][i]].GetComponent<Button>().GetComponent<Image>().color == Color.black)
+                    {
+                        allButtons[easyPattern[randPattern][i]].GetComponent<LightToggle>().ToggleSelf();
+                    }
+                }
                 break;
-            case 1:
-                allButtons[1].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 2:
-                allButtons[2].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 3:
-                allButtons[3].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 4:
-                allButtons[4].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 5:
-                allButtons[5].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 6:
-                allButtons[6].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 7:
-                allButtons[7].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 8:
-                allButtons[8].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 9:
-                allButtons[0].GetComponent<LightToggle>().ToggleSelf();
-                allButtons[8].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 10:
-                allButtons[2].GetComponent<LightToggle>().ToggleSelf();
-                allButtons[6].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 11:
-                allButtons[0].GetComponent<LightToggle>().ToggleSelf();
-                allButtons[1].GetComponent<LightToggle>().ToggleSelf();
-                break;
-            case 12:
-                allButtons[0].GetComponent<LightToggle>().ToggleSelf();
-                allButtons[8].GetComponent<LightToggle>().ToggleSelf();
+            // Choose a random hard pattern and set the button states.
+            case difficulty.hard:
+                randPattern = Random.Range(0, hardPattern.Length);
+                for (int i = 0; i < hardPattern[randPattern].Length; i++)
+                {
+                    if (allButtons[hardPattern[randPattern][i]].GetComponent<Button>().GetComponent<Image>().color == Color.black)
+                    {
+                        allButtons[hardPattern[randPattern][i]].GetComponent<LightToggle>().ToggleSelf();
+                    }
+                }
                 break;
             default:
                 break;
         }
+
         gameStart = true;
 
         startButton.GetComponentInChildren<TMP_Text>().text = "Restart";
