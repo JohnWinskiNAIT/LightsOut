@@ -25,8 +25,8 @@ public class StartingState : MonoBehaviour
     difficulty levelSetting = difficulty.easy;
 
     // Initialize the number of patterns for each difficulty.
-    int[][] easyPattern = new int[6][];
-    int[][] hardPattern = new int[6][];
+    int[][] easyPattern = new int[13][];
+    int[][] hardPattern = new int[9][];
 
     private void Start()
     {
@@ -37,6 +37,13 @@ public class StartingState : MonoBehaviour
         easyPattern[3] = new int[] { 2, 6 };
         easyPattern[4] = new int[] { 2 };
         easyPattern[5] = new int[] { 0, 3 };
+        easyPattern[6] = new int[] { 4 };
+        easyPattern[7] = new int[] { 6 };
+        easyPattern[8] = new int[] { 8 };
+        easyPattern[9] = new int[] { 0, 1 };
+        easyPattern[10] = new int[] { 0, 5 };
+        easyPattern[11] = new int[] { 0, 7 };
+        easyPattern[12] = new int[] { 4, 8 };
 
         // Set the patterns for the hard difficulty.
         hardPattern[0] = new int[] { 2, 4, 6, 8, 12, 16, 20, 24 };
@@ -45,6 +52,9 @@ public class StartingState : MonoBehaviour
         hardPattern[3] = new int[] { 1, 5, 10, 13, 15, 18, 21, 23 };
         hardPattern[4] = new int[] { 1, 5, 9, 18, 20, 21, 22, 24 };
         hardPattern[5] = new int[] { 2, 17, 18, 19, 23 };
+        hardPattern[6] = new int[] { 0, 10, 12, 14, 16, 18, 20, 22, 24 };
+        hardPattern[7] = new int[] { 2, 4, 7, 9, 10, 18, 19, 22 };
+        hardPattern[8] = new int[] { 9, 13, 15, 19, 21, 23 };
     }
 
     // Update is called once per frame
